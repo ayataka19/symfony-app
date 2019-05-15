@@ -1,1 +1,1 @@
-# symfony-book
+# symfony-app
