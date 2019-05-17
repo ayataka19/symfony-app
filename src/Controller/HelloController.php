@@ -12,15 +12,15 @@ class HelloController extends AbstractController
      */
     public function index()
     {
-        $result = <<< EOM
-        <html>
-        <head><title>Hello</title></head>
-        <body>
-        <h1>Hello Symfony!</h1>
-        <p>this is Symfony sample page.</p>
-        </body>
-        </html>
-EOM;
+        $result = '<html><body>';
+        $result .= '<h1>Subscribed Services</h1>';
+        $result .= '<ol>';
+        $arr = $this->getSubscribedServices();
+        foreach ($arr as $key => $value) {
+            $result .= '<li>' . $key . $value . '</li>';
+        }
+        $result .= '</ol>';
+        $result .= '</body></html>';
         return new Response($result);
     }
 }
