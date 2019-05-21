@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 class HelloController extends AbstractController
 {
     /**
@@ -15,11 +19,20 @@ class HelloController extends AbstractController
      */
     public function index(Request $request)
     {
-        $result = array(
+        $encoders = array(new XmlEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $data = array(
             'name'=>array('first'=>'Taro', 'second'=>'Yamada'),
             'age'=>36, 'mail'=>'taro@yamada.kun'
         );
-        return new JsonResponse($result);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'xml');
+        $result = $serializer->serialize($data, 'xml');
+        $response->setContent($result);
+        return $response;
     }
 
     /**
