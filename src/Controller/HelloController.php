@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Person;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,21 +30,14 @@ class HelloController extends AbstractController
      */
     public function index(Request $request)
     {
-        $content = <<< EOM
-        <html>
-        <head><title>Hello</title></head>
-        <body>
-        <h1>Hello!</h1>
-        <p>this is Symfony sample page.</p>
-        </body>
-        </html>
-EOM;
-        $response = new Response(
-            $content,
-            Response::HTTP_OK,
-            array('content-type' => 'text/html')
-        );
-        return $response;
+        $repository = $this->getDoctrine()
+            ->getRepository(Person::class);
+
+        $data = $repository->findAll();
+        return $this->render('hello/index.html.twig', [
+            'title' => 'Hello',
+            'data' => $data,
+        ]);
     }
 
     /**
