@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+
 use App\Entity\Person;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,6 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+
+
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 class HelloController extends AbstractController
 {
@@ -25,6 +31,7 @@ class HelloController extends AbstractController
         return new JsonResponse($data);
     }
 
+
     /**
      * @Route("/hello", name="hello")
      */
@@ -39,6 +46,36 @@ class HelloController extends AbstractController
             'data' => $data,
         ]);
     }
+
+
+    /**
+     * @Route("/find", name="find")
+     */
+    public function find(Request $request)
+    {
+        $formobj = new FindForm();
+        $form = $this->createFormBuilder($formobj)
+            ->add('find', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Click'))
+            ->getForm();
+
+
+        if ($request->getMethod() == 'POST'){
+            $form->handleRequest($request);
+            $findstr = $form->getData()->getFind();
+            $repository = $this->getDoctrine()
+                ->getRepository(Person::class);
+            $result = $repository->find($findstr);
+        } else {
+            $result = null;
+        }
+        return $this->render('hello/find.html.twig', [
+            'title' => 'Hello',
+            'form' => $form->createView(),
+            'data' => $result,
+        ]);
+    }
+
 
     /**
      * @Route("/notfound", name="notfound")
@@ -61,6 +98,7 @@ EOM;
         return $response;
     }
 
+
     /**
      * @Route("/error", name="error")
      */
@@ -82,6 +120,7 @@ EOM;
         return $response;
     }
 
+
     /**
      * @Route("/other/{domain}", name="other")
      */
@@ -92,5 +131,22 @@ EOM;
         } else {
             return new RedirectResponse("http://{$domain}.com");
         }
+    }
+
+}
+
+
+class FindForm
+{
+    private $find;
+
+
+    public function getFind()
+    {
+        return $this->find;
+    }
+    public function setFind($find)
+    {
+        $this->find = $find;
     }
 }
