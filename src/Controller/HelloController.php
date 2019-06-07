@@ -17,6 +17,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 
+use App\Form\PersonType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+
 class HelloController extends AbstractController
 {
     /**
@@ -67,13 +71,7 @@ class HelloController extends AbstractController
     public function create(Request $request)
     {
         $person = new Person();
-        $form = $this->createFormBuilder($person)
-            ->add('name', TextType::class)
-            ->add('mail', TextType::class)
-            ->add('age', IntegerType::class)
-            ->add('save', SubmitType::class, array('label' => 'Click'))
-            ->getForm();
-
+        $form = $this->createForm(PersonType::class, $person);
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
