@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 use App\Form\PersonType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 
 class HelloController extends AbstractController
@@ -68,16 +69,21 @@ class HelloController extends AbstractController
             ->getRepository(Person::class);
 
         $manager = $this->getDoctrine()->getManager();
+        $mapping = new ResultSetMappingBuilder($manager);
+        $mapping->addRootEntityFromClassMetadata('App\Entity\Person', 'p');
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
-            $query = $manager->createQuery(
-                "SELECT p FROM App\Entity\Person p
-                WHERE p.name = '{$findstr}'");
+            $arr = explode(',', $findstr);
+            $query = $manager->createNativeQuery(
+                'SELECT * FROM person WHERE age between ?1 AND ?2', $mapping)
+                ->setParameters(array(1 => $arr[0], 2 => $arr[1]));
             $result = $query->getResult();
         } else {
-            $result = $repository->findAllwithSort();
+            $query = $manager->createNativeQuery(
+                'SELECT * FROM person', $mapping);
+            $result = $query->getResult();
         }
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
