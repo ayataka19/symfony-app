@@ -71,13 +71,15 @@ class HelloController extends AbstractController
             $repository = $this->getDoctrine()
                 ->getRepository(Person::class);
             $result = $repository->findByName($findstr);
+            $result2 = $repository->findByName2($findstr);
+            $result3 = $repository->findByAge($findstr);
         } else {
             $result = null;
         }
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
             'form' => $form->createView(),
-            'data' => $result,
+            'data' => $result2,
         ]);
     }
 
