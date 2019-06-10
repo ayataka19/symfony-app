@@ -64,22 +64,24 @@ class HelloController extends AbstractController
             ->add('save', SubmitType::class, array('label' => 'Click'))
             ->getForm();
 
+        $repository = $this->getDoctrine()
+            ->getRepository(Person::class);
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
-            $repository = $this->getDoctrine()
-                ->getRepository(Person::class);
-            $result = $repository->findByName($findstr);
-            $result2 = $repository->findByName2($findstr);
-            $result3 = $repository->findByAge($findstr);
+            /*$result = $repository->findByName($findstr);
+            $result = $repository->findByName2($findstr);
+            $result = $repository->findByAge($findstr);*/
+            $result = $repository->findByNameOrMail($findstr);
         } else {
-            $result = null;
+            /*$result = null;*/
+            $result = $repository->findAllwithSort();
         }
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
             'form' => $form->createView(),
-            'data' => $result2,
+            'data' => $result,
         ]);
     }
 

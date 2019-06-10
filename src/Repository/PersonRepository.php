@@ -21,28 +21,53 @@ class PersonRepository extends ServiceEntityRepository
 
     public function findByName($value)
     {
-        return $this->createQueryBuilder('p')
-            ->where('p.name like ?1')
-            ->setParameter(1, '%' . $value . '%')
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->eq('p.name', '?1'))
+            ->setParameter(1, $value)
             ->getQuery()
             ->getResult();
     }
 
     public function findByName2($value)
     {
-        $arr = explode (',',$value);
-        return $this->createQueryBuilder('p')
-            ->where("p.name in (?1, ?2)")
-            ->setParameters(array(1=>$arr[0], 2=>$arr[1]))
+        $arr = explode(',',$value);
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->in('p.name', $arr))
             ->getQuery()
             ->getResult();
     }
 
     public function findByAge($value)
     {
+        $arr = explode(',',$value);
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->gte('p.age', '?1'))
+            ->andWhere($builder->expr()->lte('p.age', '?2'))
+            ->setParameters(array(1 => $arr[0], 2 => $arr[1]))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByNameOrMail($value)
+    {
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->like('p.name', '?1'))
+            ->orWhere($builder->expr()->like('p.mail', '?2'))
+            ->setParameters(array(1 => '%' . $value . '%', 2 => '%' . $value . '%'))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllwithSort()
+    {
         return $this->createQueryBuilder('p')
-            ->where('p.age >= ?1')
-            ->setParameter(1, $value)
+            ->orderBy('p.age', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
     }
