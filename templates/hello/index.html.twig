@@ -13,6 +13,7 @@
             <th>Name</th>
             <th>Mail</th>
             <th>Age</th>
+            <th>Messages</th>
         </tr>
         {% for item in data %}
             <tr>
@@ -20,6 +21,13 @@
                 <td>{{item.name}}</td>
                 <td>{{item.mail}}</td>
                 <td>{{item.age}}</td>
+                <td>
+                    <ul>
+                        {% for msg in item.messages %}
+                            <li>{{ msg.content }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
     </table>
