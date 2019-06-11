@@ -1,6 +1,6 @@
 <?php
-namespace App\Controller;
 
+namespace App\Controller;
 
 use App\Entity\Person;
 use Psr\Log\LoggerInterface;
@@ -11,18 +11,15 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 use App\Form\PersonType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
-
 
 class HelloController extends AbstractController
 {
@@ -39,7 +36,6 @@ class HelloController extends AbstractController
         return new JsonResponse($data);
     }
 
-
     /**
      * @Route("/hello", name="hello")
      */
@@ -54,7 +50,6 @@ class HelloController extends AbstractController
             'data' => $data,
         ]);
     }
-
 
     /**
      * @Route("/find", name="find")
@@ -94,7 +89,6 @@ class HelloController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/create", name="create")
      */
@@ -129,7 +123,6 @@ class HelloController extends AbstractController
             ]);
         }
     }
-
 
     /**
      * @Route("/create_name", name="create_name")
@@ -168,7 +161,6 @@ class HelloController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/update/{id}", name="update")
      */
@@ -180,7 +172,6 @@ class HelloController extends AbstractController
             ->add('age', IntegerType::class)
             ->add('save', SubmitType::class, array('label' => 'Click'))
             ->getForm();
-
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
@@ -197,7 +188,6 @@ class HelloController extends AbstractController
         }
     }
 
-
     /**
      * @Route("/delete/{id}", name="delete")
      */
@@ -209,7 +199,6 @@ class HelloController extends AbstractController
             ->add('age', IntegerType::class)
             ->add('save', SubmitType::class, array('label' => 'Click'))
             ->getForm();
-
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
@@ -226,7 +215,6 @@ class HelloController extends AbstractController
             ]);
         }
     }
-
 
     /**
      * @Route("/notfound", name="notfound")
@@ -249,7 +237,6 @@ EOM;
         return $response;
     }
 
-
     /**
      * @Route("/error", name="error")
      */
@@ -271,7 +258,6 @@ EOM;
         return $response;
     }
 
-
     /**
      * @Route("/other/{domain}", name="other")
      */
@@ -283,14 +269,11 @@ EOM;
             return new RedirectResponse("http://{$domain}.com");
         }
     }
-
 }
-
 
 class FindForm
 {
     private $find;
-
 
     public function getFind()
     {

@@ -1,6 +1,6 @@
 <?php
-namespace App\Form;
 
+namespace App\Form;
 
 use App\Entity\Person;
 use Symfony\Component\Form\AbstractType;
@@ -10,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 
 class PersonType extends AbstractType
 {
@@ -22,7 +21,6 @@ class PersonType extends AbstractType
             ->add('age', IntegerType::class, array('required' => false))
             ->add('save', SubmitType::class, array('label' => 'Click'));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
