@@ -21,6 +21,8 @@ use App\Form\PersonType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 class HelloController extends AbstractController
 {
     /**
@@ -48,6 +50,22 @@ class HelloController extends AbstractController
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'data' => $data,
+        ]);
+    }
+
+    /**
+     * @Route("/user", name="user")
+     */
+    public function user(Request $request)
+    {
+        if (!$this->getUser()->getIsActivated()) {
+            throw new AccessDeniedException('Unable to access!');
+        }
+
+        return $this->render('hello/user.html.twig', [
+            'title' => 'Hello',
+            'message' => 'User Information.',
+            'user' => $this->getUser(),
         ]);
     }
 
