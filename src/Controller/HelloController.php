@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use App\Service\MyService;
 
 class HelloController extends AbstractController
 {
@@ -66,6 +67,20 @@ class HelloController extends AbstractController
             'title' => 'Hello',
             'message' => 'User Information.',
             'user' => $this->getUser(),
+        ]);
+    }
+
+    /**
+     * @Route("/myService/{id}", name="myService")
+     */
+    public function myService(Request $request, int $id=1, MyService $service)
+    {
+        $person = $service->getPerson($id);
+        $msg = $person == null ? 'no person.' : 'name: ' . $person;
+        return $this->render('hello/myService.html.twig', [
+            'title' => 'Hello',
+            'message' => $service->getMessage(),
+            'person_name' => $msg,
         ]);
     }
 

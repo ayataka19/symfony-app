@@ -134,4 +134,9 @@ class User implements UserInterface, \Serializable
             $this->isActivated,
             ) = unserialize($serialized, array('allowed_classes' => false));
     }
+
+    public function __toString()
+    {
+        return '[' . $this->getUsername() . ', ' . $this->getEmail() . ']';
+    }
 }
