@@ -85,6 +85,17 @@ class HelloController extends AbstractController
     }
 
     /**
+     * @Route("/", name="main")
+     */
+    public function main(Request $request, int $id=1, MyService $service)
+    {
+        return $this->render('hello/main.html.twig', [
+            'title' => 'Hello',
+            'number' => 12345.6789,
+        ]);
+    }
+
+    /**
      * @Route("/find", name="find")
      */
     public function find(Request $request)
