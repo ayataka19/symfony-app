@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block page %}{{title}}{% endblock %}
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+    <h2>Twigカスタムタグ</h2>
+    <p>{{ number | price }}</p>
+    <p>{{ number | price('$', 2) }}</p>
+    <p>{{ number | price('#', 5) }}</p>
+    <p>{% hello %}</p>
+{% endblock %}
