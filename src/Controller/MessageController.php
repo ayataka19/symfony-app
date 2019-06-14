@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Person;
 use App\Entity\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,20 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 
 use App\Form\PersonType;
 use App\Form\MessageType;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 class MessageController extends AbstractController
 {
@@ -40,7 +35,6 @@ class MessageController extends AbstractController
             'data' => $data,
         ]);
     }
-
 
     /**
      * @Route("/message/create", name="message/create")
@@ -69,6 +63,25 @@ class MessageController extends AbstractController
             'title' => 'Message',
             'message' => $msg,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/message/page/{page}", name="message/page")
+     */
+    public function page($page=1)
+    {
+        $limit = 3;
+        $repository = $this->getDoctrine()
+            ->getRepository(Message::class);
+        $paginator = $repository->getPage($page, $limit);
+        $maxPages = ceil($paginator->count() / $limit);
+
+        return $this->render('message/page.html.twig', [
+            'title' => 'Message',
+            'data' => $paginator->getIterator(),
+            'maxPages' => $maxPages,
+            'thisPage' => $page,
         ]);
     }
 }

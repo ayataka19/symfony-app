@@ -5,3 +5,5 @@
 # hello:
 #   path: /hello
 #   controller: App\Controller\HelloController::index
+logout:
+  path: /logout
